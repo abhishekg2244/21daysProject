@@ -20,11 +20,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/frontend:latest .
+      # - name: Build Image
+      #   run: docker build -t ghcr.io/${{ github.repository_owner }}/frontend:latest .
 
-      - name: Push Image
-        run: docker push ghcr.io/${{ github.repository_owner }}/todo-app:latest
+      # - name: Push Image
+      #   run: docker push ghcr.io/${{ github.repository_owner }}/todo-app:latest
 
   # deploy:
   #   needs: build-push
