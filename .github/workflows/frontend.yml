@@ -31,7 +31,7 @@ jobs:
        
 
       - name: Push Image
-        run: docker push ghcr.io/abhishekg2244/frontend:latest .
+        run: docker push ghcr.io/abhishekg2244/frontend:latest 
 
   # deploy:
   #   needs: build-push
