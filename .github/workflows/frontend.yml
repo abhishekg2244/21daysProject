@@ -26,11 +26,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u abhishekg2244 --password-stdin
+
       - name: Build Image
-        run: docker build -t ghcr.io/abhishekg2244/21daysproject:frontend .
-                     
-      - name: Push Image
-        run: docker push ghcr.io/abhishekg2244/21daysproject:frontend
+        run: docker build -t ghcr.io/abhishekg2244/21daysproject-frontend:latest .
+                             
+      - name: Push
+        run: docker push ghcr.io/abhishekg2244/21daysproject-frontend:latest
 
   # deploy:
   #   needs: build-push
