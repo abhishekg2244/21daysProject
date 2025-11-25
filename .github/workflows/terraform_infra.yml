@@ -1,40 +1,39 @@
-name: 'Terraform'
-
-on:[workflow_dispatch]
-
-runs-on: self-hosted
+name: Terraform
+on:
+  workflow_dispatch:
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: Terraform Deployment
     runs-on: self-hosted
+
+    # 🔥 This enables manual approval (via Environments)
+    environment: 
+      name: prod   # create an environment in GitHub UI and enable "Required reviewers"
     
-
-   
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
 
-  
-    # - name: Setup Terraform
-    #   uses: hashicorp/setup-terraform@v1
-    #   with:
-    #     cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      # Step 1 – Checkout the repo
+      - name: Checkout
+        uses: actions/checkout@v4
 
-   
-    #   run: terraform init
+      # Step 2 – Login to Azure
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # # Checks that all Terraform configuration files adhere to a canonical format
-    # - name: Terraform Format
-    #   run: terraform fmt -check
+      # Step 3 – Terraform Init
+      - name: Terraform Init
+        run: terraform init
+        shell: pwsh        # since you are using Windows self-hosted runner
 
-    # # Generates an execution plan for Terraform
-    # - name: Terraform Plan
-    #   run: terraform plan -input=false
+      # Step 4 – Terraform Plan
+      - name: Terraform Plan
+        run: terraform plan
+        shell: pwsh
 
-    #   # On push to "main", build or change infrastructure according to Terraform configuration files
-    #   # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-    # - name: Terraform Apply
-    #   if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-    #   run: terraform apply -auto-approve -input=false
+      # Step 5 – Terraform Apply (after manual approval)
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        shell: pwsh
