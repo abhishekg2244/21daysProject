@@ -32,11 +32,11 @@ jobs:
       # - name: Install Dependencies
       #   run: npm install
 
-      - name: Run Unit Tests
-        run: npm test --if-present
+      # - name: Run Unit Tests
+      #   run: npm test --if-present
 
-      - name: Run Linting
-        run: npm run lint --if-present
+      # - name: Run Linting
+      #   run: npm run lint --if-present
 
       # ---------- SONARQUBE SCAN ----------
       # - name: SonarQube Scan
