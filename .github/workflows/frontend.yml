@@ -27,11 +27,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Image
-        run: docker build -t ghcr.io/abhishekg2244/21daysProject:frontend .
-       
-
+        run: docker build -t ghcr.io/abhishekg2244/21daysproject:frontend .
+                     
       - name: Push Image
-        run: docker push ghcr.io/abhishekg2244/21daysProject:frontend
+        run: docker push ghcr.io/abhishekg2244/21daysproject:frontend
 
   # deploy:
   #   needs: build-push
