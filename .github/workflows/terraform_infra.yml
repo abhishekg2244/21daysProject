@@ -10,10 +10,10 @@ jobs:
   terraform:
     name: Terraform Deployment
     runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./infra/environment/preprod
 
-    # 🔥 This enables manual approval (via Environments)
-    # environment: 
-    #   name: prod   # create an environment in GitHub UI and enable "Required reviewers"
     
     steps:
 
@@ -29,10 +29,10 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # # Step 3 – Terraform Init
-      # - name: Terraform Init
-      #   run: terraform init
-      #   shell: pwsh        # since you are using Windows self-hosted runner
+      # Step 3 – Terraform Init
+      - name: Terraform Init
+        run: terraform init
+        shell: pwsh        # since you are using Windows self-hosted runner
 
       # # Step 4 – Terraform Plan
       # - name: Terraform Plan
