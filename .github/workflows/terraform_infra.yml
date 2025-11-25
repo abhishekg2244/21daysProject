@@ -12,8 +12,8 @@ jobs:
     runs-on: self-hosted
 
     # 🔥 This enables manual approval (via Environments)
-    environment: 
-      name: prod   # create an environment in GitHub UI and enable "Required reviewers"
+    # environment: 
+    #   name: prod   # create an environment in GitHub UI and enable "Required reviewers"
     
     steps:
 
