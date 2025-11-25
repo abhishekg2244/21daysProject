@@ -11,10 +11,10 @@ jobs:
     environment: production
 
    
-    # steps:
-    # # Checkout the repository to the GitHub Actions runner
-    # - name: Checkout
-    #   uses: actions/checkout@v4
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
 
   
     # - name: Setup Terraform
