@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: todouidepoyment
+  namespace: frontend-ns
+
+spec:
+  replicas: 2
+  selector:
+    matchExpressions:
+      - key:  app
+        operator: In
+        values: 
+          - frontend
+  strategy:
+    rollingUpdate:
+       maxSurge:  25%
+       maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      name: microtodouipod
+      namespace: testns
+      labels:
+        app : frontend
+    
+    spec:
+      containers:
+        - name: todouicontainer
+          image: 2025containerregistry.azurecr.io/2025containerregistry:941
+          ports:
+            - containerPort: 80
