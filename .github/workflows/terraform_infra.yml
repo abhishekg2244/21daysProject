@@ -8,7 +8,7 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: self-hosted
-    environment: production
+    
 
    
     steps:
