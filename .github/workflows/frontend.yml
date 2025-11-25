@@ -1,16 +1,64 @@
-name: frontend
+name: CI-CD Frontend
 
 on:
-  # push:
-  #   branches: ["main"]
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
-    
+permissions:
+  contents: read
+  packages: write
+  security-events: write
+
 jobs:
+
+  # ---------------------------------------------------------
+  # 1) CI JOB — TEST + LINT + SONARQUBE
+  # ---------------------------------------------------------
+  
   CI:
-    name: CI
+    name: CI - Test + Lint + Sonar
     runs-on: self-hosted
 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # - name: Setup Node
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 18
+
+      # - name: Install Dependencies
+      #   run: npm install
+
+      - name: Run Unit Tests
+        run: npm test --if-present
+
+      - name: Run Linting
+        run: npm run lint --if-present
+
+      # ---------- SONARQUBE SCAN ----------
+      # - name: SonarQube Scan
+      #   uses: SonarSource/sonarqube-scan-action@v1.2
+      #   with:
+      #     host-url: ${{ secrets.SONAR_HOST }}
+      #     token: ${{ secrets.SONAR_TOKEN }}
+
+      # - name: SonarQube Quality Gate
+      #   uses: SonarSource/sonarqube-quality-gate-action@v1.1
+      #   with:
+      #     host-url: ${{ secrets.SONAR_HOST }}
+      #     token: ${{ secrets.SONAR_TOKEN }}
+
+# ---------------------------------------------------------
+# 2) CD JOB — Docker Build + Scan + Push
+# ---------------------------------------------------------
+
+  CD:
+    name: CD - Build, Scan & Push Image
+    needs: CI
+    runs-on: ubuntu-latest
     defaults:
         run:
           working-directory: ./application/frontend/
@@ -30,7 +78,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u abhishekg2244 --password-stdin
 
       - name: Build Image
-        run: docker build -t docker build -t frontend:latest . 
+        run: docker build -t frontend:latest . 
 
       - name: Docker Tag
         run : docker tag frontend:latest ghcr.io/abhishekg2244/frontend:latest
