@@ -1,0 +1,45 @@
+name: CI-CD Backend Services
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # Build Add Task
+      - name: Build, Tag & Push Add Task
+        working-directory: ./application/backend-api/add-task-microservice
+        run: |
+          docker build -t add-task:latest .
+          docker tag add-task:latest ghcr.io/abhishekg2244/add-task:latest
+          docker push ghcr.io/abhishekg2244/add-task:latest
+
+      # Build Get Task
+      - name: Build, Tag & Push Get Task
+        working-directory: ./application/backend-api/get-task-microservice
+        run: |
+          docker build -t get-task:latest .
+          docker tag get-task:latest ghcr.io/abhishekg2244/get-task:latest
+          docker push ghcr.io/abhishekg2244/get-task:latest
+
+      # Build Delete Task
+      - name: Build, Tag & Push Delete Task
+        working-directory: ./application/backend-api/delete-task:microservice
+        run: |
+          docker build -t delete-task:latest .
+          docker tag delete-task:latest ghcr.io/abhishekg2244/delete-task:latest
+          docker push ghcr.io/abhishekg2244/delete-task:latest

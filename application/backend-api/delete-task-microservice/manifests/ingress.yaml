@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: delete-task-ingress
+  
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: delete-task.ab-learn.xyz
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: delete-task
+            port: 
+              number: 8000
