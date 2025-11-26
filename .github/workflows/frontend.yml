@@ -73,14 +73,19 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u abhishekg2244 --password-stdin
-      - name: Build, Tag and Push Image
+      - name: Login, Build, Tag and Push Image
         run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u abhishekg2244 --password-stdin
           docker build -t frontend:latest .
           docker tag frontend:latest ghcr.io/abhishekg2244/frontend:latest
           docker push ghcr.io/abhishekg2244/frontend:latest
+      # - name: Login to GHCR
+      #   run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u abhishekg2244 --password-stdin
+      # - name: Build, Tag and Push Image
+      #   run: |
+      #     docker build -t frontend:latest .
+      #     docker tag frontend:latest ghcr.io/abhishekg2244/frontend:latest
+      #     docker push ghcr.io/abhishekg2244/frontend:latest
 
       # - name: Build Image
       #   run: docker build -t frontend:latest . 
