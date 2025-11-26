@@ -77,14 +77,17 @@ jobs:
 
       - name: Login, Build, Tag and Push
         run: |
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            # echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker login ghcr.io -u abhishekg2244 -p ${{ secrets.GITHUB_TOKEN }}
             docker build -t frontend:latest .
             docker tag frontend:latest ghcr.io/abhishekg2244/frontend:latest
             docker push ghcr.io/abhishekg2244/frontend:latest
+            shell: pwsh
 
       # - name: Login, Build, Tag and Push Image
       #   run: |
       #     echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u abhishekg2244 --password-stdin
+           
       #     docker build -t frontend:latest .
       #     docker tag frontend:latest ghcr.io/abhishekg2244/frontend:latest
       #     docker push ghcr.io/abhishekg2244/frontend:latest
