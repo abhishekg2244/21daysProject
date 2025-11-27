@@ -64,5 +64,5 @@ jobs:
       
       - name: Kubeconfig apply
         run: |
-          kubectl apply -f ./application/backend-api/delete-task-microservice/manifestes/deployment.yaml
-          kubectl apply -f ./application/backend-api/delete-task-microservice/manifestes/service.yaml
+          kubectl apply -f ./application/backend-api/delete-task-microservice/manifests/deployment.yaml
+          kubectl apply -f ./application/backend-api/delete-task-microservice/manifests/service.yaml
