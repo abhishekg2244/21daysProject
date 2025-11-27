@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: delete-task
+  name: delete-task-api
 spec:
   replicas: 3
   selector:
@@ -12,11 +12,13 @@ spec:
       labels:
         app: delete-task
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
       - name: delete-task
         env:
           - name: CONNECTION_STRING
             value: Driver={ODBC Driver 17 for SQL Server};Server=tcp:tododbserver1.database.windows.net,1433;Database=tododatabase;Uid=todoadmin;Pwd=Qwertyuiop@123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;
-        image: todoregistry22.azurecr.io/deletetask:v1
+        image: ghcr.io/abhishekg2244/delete-task:latest
         ports:
         - containerPort: 8000

@@ -1,0 +1,68 @@
+name: CI-CD-delete-task Backend Services
+
+on:
+   workflow_dispatch:
+     
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+
+  # ---------------------------------------------------------
+  # 1) CI JOB — TEST + LINT + SONARQUBE
+  # ---------------------------------------------------------
+  
+  CI:
+    name: CI - Test + Lint + Sonar
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+  
+# ---------------------------------------------------------
+# 2) CD JOB — Docker Build + Scan + Push
+# --------------------------------------------------------- 
+  CD:
+    name: CD - Build, Scan & Push Image
+    needs: CI
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./application/backend-api/delete-task-microservice
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # Build Add Task
+      - name: Build, Tag & Push Add Task
+        working-directory: ./application/backend-api/delete-task-microservice
+        run: |
+          docker build -t delete-task:latest .
+          docker tag delete-task:latest ghcr.io/abhishekg2244/delete-task:latest
+          docker push ghcr.io/abhishekg2244/delete-task:latest
+
+
+# ---------------------------------------------------------
+# 2) Deploy to DEV — dev-ns
+# --------------------------------------------------------- 
+  deploy:
+    name: deploy-dev
+    runs-on: self-hosted
+    needs: CD
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      
+      - name: Kubeconfig apply
+        run: |
+          kubectl apply -f ./application/backend-api/delete-task-microservice/manifestes/deployment.yaml
+          kubectl apply -f ./application/backend-api/delete-task-microservice/manifestes/service.yaml

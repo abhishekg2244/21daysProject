@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: get-tasks
+  name: get-task-api
 spec:
   replicas: 3
   selector:
@@ -12,11 +12,13 @@ spec:
       labels:
         app: get-task
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
       - name: get-tasks
         env:
           - name: CONNECTION_STRING
             value: "Driver={ODBC Driver 17 for SQL Server};Server=tcp:tododbserver1.database.windows.net,1433;Database=tododatabase;Uid=todoadmin;Pwd=Qwertyuiop@123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"                                          
-        image: todoregistry22.azurecr.io/gettask:v1
+        image: ghcr.io/abhishekg2244/get-task:latest
         ports:
         - containerPort: 8000
