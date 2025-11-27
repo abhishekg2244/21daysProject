@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  name: todouidepoyment
+  name: 21daystodoui
   namespace: frontend-ns
 
 spec:
@@ -25,8 +25,10 @@ spec:
         app : frontend
     
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: todouicontainer
-          image: 2025containerregistry.azurecr.io/2025containerregistry:941
+          image: ghcr.io/abhishekg2244/frontend:latest
           ports:
             - containerPort: 80

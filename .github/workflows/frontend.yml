@@ -75,25 +75,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
 
-      # - name: Login, Build, Tag and Push
-      #   run: |
-      #       # echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      #       docker login ghcr.io -u abhishekg2244 -p ${{ secrets.GITHUB_TOKEN }}
-      #       docker build -t frontend:latest .
-      #       docker tag frontend:latest ghcr.io/abhishekg2244/frontend:latest
-      #       docker push ghcr.io/abhishekg2244/frontend:latest
-      #       shell: pwsh
-
-      # - name: Login, Build, Tag and Push Image
-      #   run: |
-      #     echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u abhishekg2244 --password-stdin
-           
-      #     docker build -t frontend:latest .
-      #     docker tag frontend:latest ghcr.io/abhishekg2244/frontend:latest
-      #     docker push ghcr.io/abhishekg2244/frontend:latest
-
-
-      
+  
+     
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u abhishekg2244 --password-stdin
       - name: Build, Tag and Push Image
@@ -111,19 +94,17 @@ jobs:
       - name: Push
         run: docker push ghcr.io/abhishekg2244/frontend:latest
 
-  # deploy:
-  #   needs: build-push
-  #   runs-on: ubuntu-latest
+  deploy:
+    name: deploy-dev
+    runs-on: self-hosted
+    needs: CD
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     - name: Set kubeconfig
-  #       run: |
-  #         mkdir -p ~/.kube
-  #         echo "${{ secrets.MINIKUBE_KUBECONFIG }}" > ~/.kube/config
-
-  #     - name: Deploy to Minikube
-  #       run: |
-  #         kubectl set image deployment/todo-deployment todo-app=ghcr.io/${{ github.repository_owner }}/todo-app:latest
+      
+      - name: Kubeconfig apply
+        run: |
+          kubectl apply -f ./application/frontend/manifestes/deployment.yaml
+          kubectl apply -f ./application/frontend/manifestes/service.yaml

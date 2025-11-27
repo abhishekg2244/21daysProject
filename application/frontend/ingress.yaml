@@ -17,6 +17,6 @@ spec:
                 name: microtodoui-service
                 port: 
                   
-                  number: 9999
+                  number: 80
           
        
